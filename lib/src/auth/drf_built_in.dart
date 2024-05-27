@@ -1,5 +1,5 @@
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import 'package:drf_client/src/public/drf_config.dart';
 import 'package:drf_client/src/public/drf_response.dart';
@@ -27,8 +27,8 @@ class DRFBuiltInAuth {
       );
 
       if (response.statusCode == 200) {
-        final SharedPreferences prefs = await SharedPreferences.getInstance();
-        await prefs.setString(_prefsKey, response.body); // Store the raw response body
+        const storage = FlutterSecureStorage();
+        await storage.write(key: _prefsKey, value: response.body); // Store the raw response body
         return DrfResponse.put(statusCode: response.statusCode, body: json.decode(response.body));
       } else {
         return DrfResponse.put(statusCode: response.statusCode, body: response.body, message: "Failed to login.");
@@ -39,21 +39,20 @@ class DRFBuiltInAuth {
   }
 
   Future<bool> logout(DrfConfig config) async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    const storage = FlutterSecureStorage();
 
-   if(prefs.getString(_prefsKey) == null){
+   if(await storage.read(key: _prefsKey) == null){
      throw Exception("User not logged in with DrfConfig that you specified");
    }
 
-    await prefs.remove(_prefsKey);
-
+    await storage.delete(key: _prefsKey);
 
     if (config.logoutUrl == null) {
       return true;
     } else {
 
       try {
-        Map<String, dynamic> tokenData = json.decode(prefs.getString(_prefsKey)!);
+        Map<String, dynamic> tokenData = json.decode((await storage.read(key: _prefsKey))!);
         String? token = tokenData['token'];
 
         await http.post(
@@ -73,8 +72,8 @@ class DRFBuiltInAuth {
   }
 
   Future<String?> getToken() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? tokenDetails = prefs.getString(_prefsKey);
+    const storage = FlutterSecureStorage();
+    String? tokenDetails = await storage.read(key: _prefsKey);
     if (tokenDetails != null) {
       Map<String, dynamic> tokenData = json.decode(tokenDetails);
       return tokenData['token']; // Assuming 'token' is the correct key

@@ -5,11 +5,12 @@ import 'package:drf_client/src/public/drf_config.dart';
 import 'package:drf_client/src/public/drf_response.dart';
 import 'package:drf_client/src/request/drf_built_in.dart';
 import 'package:drf_client/src/request/oauth_toolkit.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:oauth2/oauth2.dart' as oauth2;
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../auth/drf_built_in_oauth.dart';
 import '../utils/register_windows_scheme.dart';
+import 'package:flutter/material.dart' show debugPrint;
 
 class DrfClient {
   static final DrfClient _instance = DrfClient._internal();
@@ -127,8 +128,8 @@ class DrfClient {
     }
     DrfConfig config = _configs[useKey]!;
     if (config.authType == AuthType.oauthToolkit) {
-      final SharedPreferences prefs = await SharedPreferences.getInstance();
-      await prefs.remove(useKey);
+      const storage = FlutterSecureStorage();
+      await storage.delete(key: useKey);
       return true;
     } else if (config.authType == AuthType.drfBuiltInOauth){
       return await DRFBuiltInOauth(useKey).logout(config);
@@ -141,8 +142,8 @@ class DrfClient {
     if (useKey == null || !_configs.containsKey(useKey)) {
       return false;
     }
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getString(useKey) != null;
+    const storage = FlutterSecureStorage();
+    return (await storage.read(key: useKey)) != null;
   }
 
   Future<String?> _getAuthToken({String? configKey}) async {
@@ -196,7 +197,7 @@ class DrfClient {
           throw Exception("User is not logged in but includeAuth set to true");
         }
       } else {
-        print("You should specify includeAuth = false if you want to request without Auth, or login");
+        debugPrint("You should specify includeAuth = false if you want to request without Auth, or login");
       }
     }
 

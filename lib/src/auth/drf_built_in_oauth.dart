@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:app_links/app_links.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import 'package:drf_client/src/public/drf_config.dart';
 import 'package:drf_client/src/public/drf_response.dart';
@@ -34,11 +34,11 @@ class DRFBuiltInOauth {
 
       _appLinks.uriLinkStream.listen((uri) async {
         if (uri.scheme == config.oauthConfig!.redirectScheme) {
-          final SharedPreferences prefs = await SharedPreferences.getInstance();
+          const storage = FlutterSecureStorage();
           var token = uri.queryParameters['token'];
           if (token != null && token.isNotEmpty) {
             String tokenJson = jsonEncode({'token': token});
-            await prefs.setString(_prefsKey, tokenJson);
+            await storage.write(key: _prefsKey, value: tokenJson);
             completer.complete(DrfResponse(statusCode: 200, body: tokenJson, message: "Login Success"));
           } else {
             completer.completeError(Exception("No token provided in redirect uri"));
@@ -56,19 +56,19 @@ class DRFBuiltInOauth {
   }
 
   Future<bool> logout(DrfConfig config) async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    const storage = FlutterSecureStorage();
 
-    if (prefs.getString(_prefsKey) == null) {
+    if (await storage.read(key: _prefsKey) == null) {
       throw Exception("User not logged in with DrfConfig that you specified");
     }
 
-    await prefs.remove(_prefsKey);
+    await storage.delete(key: _prefsKey);
 
     if (config.logoutUrl == null) {
       return true;
     } else {
       try {
-        Map<String, dynamic> tokenData = json.decode(prefs.getString(_prefsKey)!);
+        Map<String, dynamic> tokenData = json.decode((await storage.read(key: _prefsKey))!);
         String? token = tokenData['token'];
 
         await http.post(
@@ -87,8 +87,8 @@ class DRFBuiltInOauth {
   }
 
   Future<String?> getToken() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? tokenDetails = prefs.getString(_prefsKey);
+    const storage = FlutterSecureStorage();
+    String? tokenDetails = await storage.read(key: _prefsKey);
     if (tokenDetails != null) {
       Map<String, dynamic> tokenData = json.decode(tokenDetails);
       return tokenData['token'];

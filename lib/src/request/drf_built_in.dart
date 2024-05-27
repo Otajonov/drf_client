@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:drf_client/src/public/drf_config.dart';
 import 'package:drf_client/src/public/drf_response.dart';
+import 'package:flutter/material.dart' show debugPrint;
 
 class DrfBuiltInRequest {
   final DrfConfig config;
@@ -42,7 +43,7 @@ class DrfBuiltInRequest {
 
       if (files != null && files.isNotEmpty) {
 
-        print(files.toString());
+        debugPrint(files.toString());
         // If files are provided, use multipart request
         var request = http.MultipartRequest(method.toUpperCase(), uri);
         request.headers.addAll(headers);
@@ -58,7 +59,6 @@ class DrfBuiltInRequest {
           ));
         });
         var streamedResponse = await request.send();
-        print("Fayl bilan ketyapman qorqma");
         response = await http.Response.fromStream(streamedResponse);
       } else {
 

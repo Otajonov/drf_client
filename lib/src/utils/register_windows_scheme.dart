@@ -1,16 +1,12 @@
 import 'dart:io';
 
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:win32_registry/win32_registry.dart';
 
 
 Future<void> ensureCustomSchemeRegisteredOnWindows(String scheme) async {
-  final SharedPreferences prefs = await SharedPreferences.getInstance();
-  bool isSchemeRegistered = prefs.getBool('isCustomSchemeRegisteredOnWindows') ?? false;
 
-  if (!isSchemeRegistered && Platform.isWindows) {
+  if (Platform.isWindows) {
     await _registerScheme(scheme);
-    await prefs.setBool('isCustomSchemeRegisteredOnWindows', true);
   }
 }
 

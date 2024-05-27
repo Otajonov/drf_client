@@ -1,8 +1,9 @@
 import 'dart:async';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:oauth2/oauth2.dart' as oauth2;
 import 'package:drf_client/src/public/drf_config.dart';
 import 'package:drf_client/src/public/drf_response.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter/material.dart';
 
 class OauthToolkitAuth {
 
@@ -22,12 +23,12 @@ class OauthToolkitAuth {
         scopes: config.oauthConfig!.scopes,
       );
 
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setString(prefsKey, client.credentials.toJson());
+      const storage = FlutterSecureStorage();
+      await storage.write(key: prefsKey, value: client.credentials.toJson());
 
       return DrfResponse(statusCode: 200, body: client.credentials.toJson(), message: "Logged in success");
     } catch (e) {
-      print('Error during Authorization Code flow: $e');
+      debugPrint('Error during Authorization Code flow: $e');
       return DrfResponse(statusCode: 500, message: 'Error during Resource Owner Password Credentials flow: $e');
     }
   }
@@ -72,8 +73,8 @@ class OauthToolkitAuth {
   // }
 
   Future<oauth2.Credentials?> getCredentials(String prefsKey) async {
-    final prefs = await SharedPreferences.getInstance();
-    final storedCredentials = prefs.getString(prefsKey);
+    const storage = FlutterSecureStorage();
+    final storedCredentials = await storage.read(key: prefsKey);
     if (storedCredentials != null) {
       final credentials = oauth2.Credentials.fromJson(storedCredentials);
       return credentials;

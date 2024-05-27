@@ -1,6 +1,6 @@
 name: drf_client
 description: A complete REST API client for Django Rest Framework based backends, empowering you to build your app effortlessly without reinventing the wheel. Supports Django OAuth Toolkit, SimpleJWT, and token store/refresh using Shared Preferences.
-version: 0.0.2
+version: 0.0.3
 homepage: https://docs.tijorat.org/flutter/
 
 environment:
@@ -8,20 +8,18 @@ environment:
   flutter: ">=1.17.0"
 
 dependencies:
-  app_links: ^4.0.0
+  app_links: ^6.1.1
   flutter:
     sdk: flutter
-  get_it: ^7.6.7
+  flutter_secure_storage: ^9.2.2
   http: ^1.1.0
-  jwt_decoder: ^2.0.1
   oauth2: ^2.0.2
-  shared_preferences: ^2.2.0
   url_launcher: ^6.2.5
   win32_registry: ^1.1.2
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^3.0.1
+  flutter_lints: ^4.0.0
 
 flutter:
