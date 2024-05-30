@@ -146,6 +146,10 @@ class DrfClient {
     return (await storage.read(key: useKey)) != null;
   }
 
+  Future<String?> getAuthToken({String? configKey}) async {
+    return _getAuthToken(configKey: configKey);
+  }
+
   Future<String?> _getAuthToken({String? configKey}) async {
     String? useKey = configKey ?? _defaultConfigKey;
     if (useKey == null) return null;
