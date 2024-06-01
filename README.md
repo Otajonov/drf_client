@@ -2,7 +2,7 @@ Helps you to automatically authenticate and store tokens and refresh them, also 
 
 ## Features
 
-✅ Automatically store tokens using Shared Preferences
+✅ Automatically store tokens using Flutter Secure Storage
 ✅ Automatically refresh tokens
 ✅ Supports Oauth2 by Django Oauth Toolkit
 ✅ Easy REST API call with auth credentials
