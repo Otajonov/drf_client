@@ -2,11 +2,11 @@ Helps you to automatically authenticate and store tokens and refresh them, also 
 
 ## Features
 
-✅ Automatically store tokens using Flutter Secure Storage
-✅ Automatically refresh tokens
-✅ Supports Oauth2 by Django Oauth Toolkit
-✅ Easy REST API call with auth credentials
-✅ More coming soon ...
+- ✅ Automatically store tokens using Flutter Secure Storage
+- ✅ Automatically refresh tokens
+- ✅ Supports Oauth2 by Django Oauth Toolkit
+- ✅ Easy REST API call with auth credentials
+- ✅ More coming soon ...
 
 ## Getting started
 
@@ -32,11 +32,63 @@ Enjoy coding!
 
 ## Usage
 
-Firstly, initialize the config by:
+Firstly, initialize the config:
 ```dart  
-// coming soon ...
+
+  void main() {
+  
+  // existing code
+  
+    DrfClient client = DrfClient();
+    client.addConfig('your-app', DrfConfig(
+      authType: AuthType.drfBuiltInAuth,
+      baseUrl: 'https://your-app.com/api',
+      tokenUrl: 'https://your-app.com/api/token',
+      refreshTokenUrl: 'https://your-app.com/api/token/refresh',
+
+      usernameField: 'username', // default username, change this if you are using custom user model in django
+      passwordField: 'password', // def password, change this if you changed password field in you user model
+      refreshField: 'refresh_token', // change this to comply with your token refresh logic if JWT used
+      
+
+      // Set this if u are using Authorization Code over Django-oauth-toolkit
+      // oauthConfig: OauthConfig(
+      // clientId: "",
+      // clientSecret: "",
+      // authorizationEndpointUrl: "https://ilmchat.com/auth/authorize/",
+      // redirectScheme: 'you-app-shceme'
+      //
+      // )
+    ));
+  }
+    
 ```  
 
-## Additional information
+You can also set multiple config so that you can make request and authenticate multiple django servers at the same code by giving specific app name in config.
 
-https://docs.tijorat.org/flutter/drf_client
+## Authenticating users
+
+via drfBuiltInAuth:
+
+```dart
+
+DrfClient client = DrfClient();
+
+client.loginDrfBuiltIn()
+
+
+```
+
+## making requests
+
+```dart
+
+DrfClient client = DrfClient();
+
+client.get() // post() put() patch() delete()
+
+
+```
+
+It will use stored user token in requests if logged in.
+You can remove Token from auth header by includeToken: false
