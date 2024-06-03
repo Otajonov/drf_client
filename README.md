@@ -1,5 +1,7 @@
 Helps you to automatically authenticate and store tokens and refresh them, also make api requests using them.
 
+This project is under development. View the GitHub code and contribute 👉 https://github.com/Otajonov/drf_client
+
 ## Features
 
 - ✅ Automatically store tokens using Flutter Secure Storage
