@@ -6,8 +6,8 @@ import 'package:drf_client/src/public/drf_response.dart';
 import 'package:flutter/material.dart';
 
 class OauthToolkitAuth {
-
-  Future<DrfResponse> loginWithResourceOwner(DrfConfig config, String username, String password, String prefsKey) async {
+  Future<DrfResponse> loginWithResourceOwner(DrfConfig config, String username,
+      String password, String prefsKey) async {
     if (config.oauthConfig == null || config.tokenUrl == null) {
       throw Exception("OauthConfig is required for OAuth Toolkit.");
     }
@@ -26,10 +26,15 @@ class OauthToolkitAuth {
       const storage = FlutterSecureStorage();
       await storage.write(key: prefsKey, value: client.credentials.toJson());
 
-      return DrfResponse(statusCode: 200, body: client.credentials.toJson(), message: "Logged in success");
+      return DrfResponse(
+          statusCode: 200,
+          body: client.credentials.toJson(),
+          message: "Logged in success");
     } catch (e) {
       debugPrint('Error during Authorization Code flow: $e');
-      return DrfResponse(statusCode: 500, message: 'Error during Resource Owner Password Credentials flow: $e');
+      return DrfResponse(
+          statusCode: 500,
+          message: 'Error during Resource Owner Password Credentials flow: $e');
     }
   }
   //
@@ -81,5 +86,4 @@ class OauthToolkitAuth {
     }
     return null;
   }
-
 }

@@ -1,9 +1,8 @@
 import '../config/const.dart';
 
-enum AuthType {drfBuiltIn, drfBuiltInOauth, simpleJWT, oauthToolkit}
+enum AuthType { drfBuiltIn, drfBuiltInOauth, simpleJWT, oauthToolkit }
 
-class OauthConfig{
-
+class OauthConfig {
   String clientId;
   String clientSecret;
   String? authorizationEndpointUrl;
@@ -11,14 +10,13 @@ class OauthConfig{
   String? redirectUri;
   String? redirectScheme;
 
-  OauthConfig({
-    required this.clientId,
-    required this.clientSecret,
-    this.authorizationEndpointUrl,
-    this.scopes,
-    this.redirectUri,
-    this.redirectScheme
-  });
+  OauthConfig(
+      {required this.clientId,
+      required this.clientSecret,
+      this.authorizationEndpointUrl,
+      this.scopes,
+      this.redirectUri,
+      this.redirectScheme});
 }
 
 class DrfConfig {
@@ -32,15 +30,14 @@ class DrfConfig {
   AuthType authType;
   OauthConfig? oauthConfig;
 
-  DrfConfig({
-    required this.baseUrl,
-    this.tokenUrl,
-    this.refreshTokenUrl,
-    this.logoutUrl,
-    this.usernameField = kDefaultUsernameField,
-    this.passwordField = kDefaultPasswordField,
-    this.refreshField = kRefreshField,
-    this.authType = AuthType.drfBuiltIn,
-    this.oauthConfig
-  });
+  DrfConfig(
+      {required this.baseUrl,
+      this.tokenUrl,
+      this.refreshTokenUrl,
+      this.logoutUrl,
+      this.usernameField = kDefaultUsernameField,
+      this.passwordField = kDefaultPasswordField,
+      this.refreshField = kRefreshField,
+      this.authType = AuthType.drfBuiltIn,
+      this.oauthConfig});
 }
