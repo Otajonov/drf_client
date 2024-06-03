@@ -13,16 +13,21 @@ class OauthToolkitRequest {
   OauthToolkitRequest(this.config, this.prefsKey);
 
   String _makeUrl(String path) {
-    String baseUrl = config.baseUrl.endsWith('/') ? config.baseUrl : '${config.baseUrl}/';
+    String baseUrl =
+        config.baseUrl.endsWith('/') ? config.baseUrl : '${config.baseUrl}/';
     String formattedPath = path.startsWith('/') ? path.substring(1) : path;
-    formattedPath = (formattedPath.endsWith('/') || formattedPath.contains('?')) ? formattedPath : '$formattedPath/';
+    formattedPath = (formattedPath.endsWith('/') || formattedPath.contains('?'))
+        ? formattedPath
+        : '$formattedPath/';
     return '$baseUrl$formattedPath';
   }
 
   Future<oauth2.Client> _initializeClient() async {
     final credentials = await OauthToolkitAuth().getCredentials(prefsKey);
     if (credentials != null) {
-      return oauth2.Client(credentials, identifier: config.oauthConfig!.clientId, secret: config.oauthConfig!.clientSecret);
+      return oauth2.Client(credentials,
+          identifier: config.oauthConfig!.clientId,
+          secret: config.oauthConfig!.clientSecret);
     }
     throw Exception("Not logged in or invalid OAuth credentials");
   }
@@ -37,7 +42,10 @@ class OauthToolkitRequest {
     oauth2.Client client = await _initializeClient();
     String url = _makeUrl(path);
     Uri uri = Uri.parse(url);
-    Map<String, String> headers = {'Content-Type': 'application/json', 'Accept': 'application/json'};
+    Map<String, String> headers = {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
+    };
 
     if (customHeaders != null) {
       headers.addAll(customHeaders);
@@ -48,7 +56,8 @@ class OauthToolkitRequest {
         ..headers.addAll(headers);
 
       for (var entry in files.entries) {
-        request.files.add(await http.MultipartFile.fromPath(entry.key, entry.value.path));
+        request.files.add(
+            await http.MultipartFile.fromPath(entry.key, entry.value.path));
       }
 
       body?.forEach((key, value) {
@@ -81,14 +90,32 @@ class OauthToolkitRequest {
   Future<DrfResponse> get(String path, {Map<String, String>? headers}) =>
       _performRequest(method: 'GET', path: path, customHeaders: headers);
 
-  Future<DrfResponse> post(String path, Map<String, dynamic> body, {Map<String, String>? headers, Map<String, File>? files}) =>
-      _performRequest(method: 'POST', path: path, body: body, files: files, customHeaders: headers);
+  Future<DrfResponse> post(String path, Map<String, dynamic> body,
+          {Map<String, String>? headers, Map<String, File>? files}) =>
+      _performRequest(
+          method: 'POST',
+          path: path,
+          body: body,
+          files: files,
+          customHeaders: headers);
 
-  Future<DrfResponse> put(String path, Map<String, dynamic> body, {Map<String, String>? headers, Map<String, File>? files}) =>
-      _performRequest(method: 'PUT', path: path, body: body, files: files, customHeaders: headers);
+  Future<DrfResponse> put(String path, Map<String, dynamic> body,
+          {Map<String, String>? headers, Map<String, File>? files}) =>
+      _performRequest(
+          method: 'PUT',
+          path: path,
+          body: body,
+          files: files,
+          customHeaders: headers);
 
-  Future<DrfResponse> patch(String path, Map<String, dynamic> body, {Map<String, String>? headers, Map<String, File>? files}) =>
-      _performRequest(method: 'PATCH', path: path, body: body, files: files, customHeaders: headers);
+  Future<DrfResponse> patch(String path, Map<String, dynamic> body,
+          {Map<String, String>? headers, Map<String, File>? files}) =>
+      _performRequest(
+          method: 'PATCH',
+          path: path,
+          body: body,
+          files: files,
+          customHeaders: headers);
 
   Future<DrfResponse> delete(String path, {Map<String, String>? headers}) =>
       _performRequest(method: 'DELETE', path: path, customHeaders: headers);

@@ -30,7 +30,10 @@ class DRFBuiltInOauth {
     Completer<DrfResponse> completer = Completer<DrfResponse>();
 
     try {
-      await launchUrl(Uri.parse("${config.oauthConfig!.authorizationEndpointUrl!}?scheme=${config.oauthConfig!.redirectScheme!}"), mode: LaunchMode.inAppBrowserView);
+      await launchUrl(
+          Uri.parse(
+              "${config.oauthConfig!.authorizationEndpointUrl!}?scheme=${config.oauthConfig!.redirectScheme!}"),
+          mode: LaunchMode.inAppBrowserView);
 
       _appLinks.uriLinkStream.listen((uri) async {
         if (uri.scheme == config.oauthConfig!.redirectScheme) {
@@ -39,15 +42,17 @@ class DRFBuiltInOauth {
           if (token != null && token.isNotEmpty) {
             String tokenJson = jsonEncode({'token': token});
             await storage.write(key: _prefsKey, value: tokenJson);
-            completer.complete(DrfResponse(statusCode: 200, body: tokenJson, message: "Login Success"));
+            completer.complete(DrfResponse(
+                statusCode: 200, body: tokenJson, message: "Login Success"));
           } else {
-            completer.completeError(Exception("No token provided in redirect uri"));
+            completer
+                .completeError(Exception("No token provided in redirect uri"));
           }
         } else {
-          completer.completeError(Exception("Unexpected URI scheme received: ${uri.scheme}"));
+          completer.completeError(
+              Exception("Unexpected URI scheme received: ${uri.scheme}"));
         }
       });
-
     } catch (e) {
       throw Exception("An error occurred during login. $e");
     }
@@ -68,7 +73,8 @@ class DRFBuiltInOauth {
       return true;
     } else {
       try {
-        Map<String, dynamic> tokenData = json.decode((await storage.read(key: _prefsKey))!);
+        Map<String, dynamic> tokenData =
+            json.decode((await storage.read(key: _prefsKey))!);
         String? token = tokenData['token'];
 
         await http.post(

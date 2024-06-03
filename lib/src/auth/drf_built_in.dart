@@ -9,10 +9,11 @@ class DRFBuiltInAuth {
 
   DRFBuiltInAuth(this._prefsKey);
 
-  Future<DrfResponse> login(DrfConfig config, String username, String password) async {
+  Future<DrfResponse> login(
+      DrfConfig config, String username, String password) async {
     if (config.authType != AuthType.drfBuiltIn) {
       throw Exception("AuthType.drfBuiltIn required for this method");
-    } else if(config.tokenUrl == null){
+    } else if (config.tokenUrl == null) {
       throw Exception("tokenUrl is not set in DrfConfig");
     }
 
@@ -28,31 +29,38 @@ class DRFBuiltInAuth {
 
       if (response.statusCode == 200) {
         const storage = FlutterSecureStorage();
-        await storage.write(key: _prefsKey, value: response.body); // Store the raw response body
-        return DrfResponse.put(statusCode: response.statusCode, body: json.decode(response.body));
+        await storage.write(
+            key: _prefsKey,
+            value: response.body); // Store the raw response body
+        return DrfResponse.put(
+            statusCode: response.statusCode, body: json.decode(response.body));
       } else {
-        return DrfResponse.put(statusCode: response.statusCode, body: response.body, message: "Failed to login.");
+        return DrfResponse.put(
+            statusCode: response.statusCode,
+            body: response.body,
+            message: "Failed to login.");
       }
     } catch (e) {
-      return DrfResponse.put(statusCode: 500, message: "An error occurred during login. $e");
+      return DrfResponse.put(
+          statusCode: 500, message: "An error occurred during login. $e");
     }
   }
 
   Future<bool> logout(DrfConfig config) async {
     const storage = FlutterSecureStorage();
 
-   if(await storage.read(key: _prefsKey) == null){
-     throw Exception("User not logged in with DrfConfig that you specified");
-   }
+    if (await storage.read(key: _prefsKey) == null) {
+      throw Exception("User not logged in with DrfConfig that you specified");
+    }
 
     await storage.delete(key: _prefsKey);
 
     if (config.logoutUrl == null) {
       return true;
     } else {
-
       try {
-        Map<String, dynamic> tokenData = json.decode((await storage.read(key: _prefsKey))!);
+        Map<String, dynamic> tokenData =
+            json.decode((await storage.read(key: _prefsKey))!);
         String? token = tokenData['token'];
 
         await http.post(
@@ -68,7 +76,6 @@ class DRFBuiltInAuth {
         throw Exception("Error $e");
       }
     }
-
   }
 
   Future<String?> getToken() async {

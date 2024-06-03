@@ -18,13 +18,13 @@ class DrfResponse {
 
   bool get isSuccess => statusCode >= 200 && statusCode < 300;
 
-
   String? get bodyUtf8 {
     if (httpResponse != null) {
       return utf8.decode(httpResponse!.bodyBytes);
     } else if (streamedResponse != null) {
       // This is a simplification. In reality, handling streamed responses might need async processing.
-      return utf8.decode(streamedResponse!.stream.toBytes().asStream().toString().codeUnits);
+      return utf8.decode(
+          streamedResponse!.stream.toBytes().asStream().toString().codeUnits);
     }
     return null;
   }
@@ -37,13 +37,17 @@ class DrfResponse {
     }
   }
 
-  factory DrfResponse.put({required int statusCode, dynamic body, http.Response? httpResponse, http.StreamedResponse? streamedResponse, String? message}) {
+  factory DrfResponse.put(
+      {required int statusCode,
+      dynamic body,
+      http.Response? httpResponse,
+      http.StreamedResponse? streamedResponse,
+      String? message}) {
     return DrfResponse(
         statusCode: statusCode,
         body: body,
         httpResponse: httpResponse,
         streamedResponse: streamedResponse,
-        message: message
-    );
+        message: message);
   }
 }

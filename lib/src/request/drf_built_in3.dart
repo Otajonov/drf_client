@@ -10,9 +10,12 @@ class DrfBuiltInRequest {
   DrfBuiltInRequest(this.config);
 
   String _makeUrl(String path) {
-    String baseUrl = config.baseUrl.endsWith('/') ? config.baseUrl : '${config.baseUrl}/';
+    String baseUrl =
+        config.baseUrl.endsWith('/') ? config.baseUrl : '${config.baseUrl}/';
     String formattedPath = path.startsWith('/') ? path.substring(1) : path;
-    formattedPath = (formattedPath.endsWith('/') || formattedPath.contains('?')) ? formattedPath : '$formattedPath/';
+    formattedPath = (formattedPath.endsWith('/') || formattedPath.contains('?'))
+        ? formattedPath
+        : '$formattedPath/';
     return '$baseUrl$formattedPath';
   }
 
@@ -26,7 +29,10 @@ class DrfBuiltInRequest {
   }) async {
     String url = _makeUrl(path);
     Uri uri = Uri.parse(url);
-    Map<String, String> headers = {'Content-Type': 'application/json', 'Accept': 'application/json'};
+    Map<String, String> headers = {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
+    };
     if (token != null) {
       headers['Authorization'] = 'Token $token';
     }
@@ -40,7 +46,8 @@ class DrfBuiltInRequest {
         ..headers.addAll(headers);
 
       for (var entry in files.entries) {
-        request.files.add(await http.MultipartFile.fromPath(entry.key, entry.value.path));
+        request.files.add(
+            await http.MultipartFile.fromPath(entry.key, entry.value.path));
       }
 
       body?.forEach((key, value) {
@@ -58,13 +65,16 @@ class DrfBuiltInRequest {
 
       switch (method.toUpperCase()) {
         case 'POST':
-          httpResponse = await http.post(uri, headers: headers, body: bodyEncoded);
+          httpResponse =
+              await http.post(uri, headers: headers, body: bodyEncoded);
           break;
         case 'PUT':
-          httpResponse = await http.put(uri, headers: headers, body: bodyEncoded);
+          httpResponse =
+              await http.put(uri, headers: headers, body: bodyEncoded);
           break;
         case 'PATCH':
-          httpResponse = await http.patch(uri, headers: headers, body: bodyEncoded);
+          httpResponse =
+              await http.patch(uri, headers: headers, body: bodyEncoded);
           break;
         default:
           throw Exception("HTTP method $method not supported");
@@ -78,18 +88,49 @@ class DrfBuiltInRequest {
     }
   }
 
-  Future<DrfResponse> get(String path, {Map<String, String>? headers, String? token}) =>
-      _performRequest(method: 'GET', path: path, customHeaders: headers, token: token);
+  Future<DrfResponse> get(String path,
+          {Map<String, String>? headers, String? token}) =>
+      _performRequest(
+          method: 'GET', path: path, customHeaders: headers, token: token);
 
-  Future<DrfResponse> post(String path, Map<String, dynamic> body, {Map<String, String>? headers, String? token, Map<String, File>? files}) =>
-      _performRequest(method: 'POST', path: path, body: body, files: files, customHeaders: headers, token: token);
+  Future<DrfResponse> post(String path, Map<String, dynamic> body,
+          {Map<String, String>? headers,
+          String? token,
+          Map<String, File>? files}) =>
+      _performRequest(
+          method: 'POST',
+          path: path,
+          body: body,
+          files: files,
+          customHeaders: headers,
+          token: token);
 
-  Future<DrfResponse> put(String path, Map<String, dynamic> body, {Map<String, String>? headers, String? token, Map<String, File>? files}) =>
-      _performRequest(method: 'PUT', path: path, body: body, files: files, customHeaders: headers, token: token);
+  Future<DrfResponse> put(String path, Map<String, dynamic> body,
+          {Map<String, String>? headers,
+          String? token,
+          Map<String, File>? files}) =>
+      _performRequest(
+          method: 'PUT',
+          path: path,
+          body: body,
+          files: files,
+          customHeaders: headers,
+          token: token);
 
-  Future<DrfResponse> patch(String path, Map<String, dynamic> body, {Map<String, String>? headers, String? token, Map<String, File>? files}) =>
-      _performRequest(method: 'PATCH', path: path, body: body, files: files, customHeaders: headers, token: token);
+  Future<DrfResponse> patch(String path, Map<String, dynamic> body,
+          {Map<String, String>? headers,
+          String? token,
+          Map<String, File>? files}) =>
+      _performRequest(
+          method: 'PATCH',
+          path: path,
+          body: body,
+          files: files,
+          customHeaders: headers,
+          token: token);
 
-  Future<DrfResponse> delete(String path, {Map<String, String>? headers, String? token}) =>
-      _performRequest(method: 'DELETE', path: path, customHeaders: headers, token: token);
+  Future<DrfResponse> delete(String path,
+          {Map<String, String>? headers, String? token}) =>
+      _performRequest(
+          method: 'DELETE', path: path, customHeaders: headers, token: token);
 }

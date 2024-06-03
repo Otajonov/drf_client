@@ -1,7 +1,8 @@
 name: drf_client
-description: A complete REST API client for Django Rest Framework based backends, empowering you to build your app effortlessly without reinventing the wheel. Supports Django OAuth Toolkit, SimpleJWT, and token store/refresh using Shared Preferences.
-version: 0.0.5
+description: A complete REST API client with authentication for Django Rest Framework based backends
+version: 0.0.6
 homepage: https://github.com/Otajonov/drf_client
+license: MIT
 
 
 environment:
@@ -22,9 +23,6 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^4.0.0
-
-flutter:
-
 
 platforms:
   android:

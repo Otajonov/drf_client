@@ -2,9 +2,7 @@ import 'dart:io';
 
 import 'package:win32_registry/win32_registry.dart';
 
-
 Future<void> ensureCustomSchemeRegisteredOnWindows(String scheme) async {
-
   if (Platform.isWindows) {
     await _registerScheme(scheme);
   }

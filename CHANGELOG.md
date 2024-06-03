@@ -1,7 +1,10 @@
-## 0.0.5
-* Updated supported platforms
+## 0.0.6
+* Prepare for public
 
-## 0.0.3
+## 0.0.5
+* Nothing big
+
+## 0.0.4
 * Github repo
 
 ## 0.0.3
@@ -11,4 +14,4 @@
 * Improvements
 
 ## 0.0.1
-* Initial release (Not complete)
+* Initial release
